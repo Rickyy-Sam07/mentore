@@ -1,0 +1,36 @@
+# Model files (too large for git)
+saved_models/
+saved_models_roberta/
+saved_models_distilbert/
+*.pth
+*.pkl
+
+# Training outputs
+outputs/
+outputs_roberta/
+outputs_distilbert/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
