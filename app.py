@@ -148,7 +148,7 @@ class LocalModelPredictor:
     def predict(self, text, top_k=5):
         """Make prediction"""
         
-        encoding = self.tokenizer.encode_plus(
+        encoding = self.tokenizer(
             text,
             add_special_tokens=True,
             max_length=self.max_length,
