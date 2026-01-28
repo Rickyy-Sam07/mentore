@@ -26,8 +26,8 @@ HF_REPO_ID = "Sam-veda/ramayana-chapter-classifier"
 
 # Page config
 st.set_page_config(
-    page_title="Chapter Classification",
-    page_icon="�",
+    page_title="Topic Classification System",
+    page_icon="📚",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -219,7 +219,7 @@ def main():
     top_k = st.sidebar.slider("Top-K Predictions:", 1, 10, 5)
     
     # Main content
-    tab1, tab2, tab3 = st.tabs(["Single Prediction", "Compare Models", "Batch Prediction"])
+    tab1, tab2 = st.tabs(["Single Prediction", "Compare Models"])
     
     # Tab 1: Single Prediction
     with tab1:
@@ -228,34 +228,10 @@ def main():
         # Text input
         text_input = st.text_area(
             "Input Text:",
-            height=150,
+            height=200,
             placeholder="Enter text from Ramayana...",
             help="Enter a passage to classify which chapter it belongs to"
         )
-        
-        # Example texts
-        col1, col2, col3 = st.columns(3)
-        
-        examples = [
-            "O Sage, I would hear of such a man from you, who art able to describe him to me.",
-            "The wise and eloquent Valmiki with his disciple, Bharadvaja, having listened to the words of Narada, was filled with wonder and worshipped Rama in his heart.",
-            "Rama, Lakshmana and Sita dwelt happily in the forest like devas or gandharvas."
-        ]
-        
-        with col1:
-            if st.button("Example 1"):
-                text_input = examples[0]
-                st.rerun()
-        
-        with col2:
-            if st.button("Example 2"):
-                text_input = examples[1]
-                st.rerun()
-        
-        with col3:
-            if st.button("Example 3"):
-                text_input = examples[2]
-                st.rerun()
         
         # Predict button
         if st.button("Predict Chapter", type="primary"):
@@ -287,47 +263,41 @@ def main():
             if not compare_text:
                 st.warning("Please enter some text!")
             else:
-                with st.spinner("Running predictions on all models..."):
-                    results = {}
-                    
-                    # BERT
+                results = {}
+                
+                # Run models sequentially to avoid memory issues
+                # BERT
+                with st.spinner("Running BERT prediction..."):
                     try:
                         bert_predictor = load_local_model("BERT")
                         results["BERT"] = bert_predictor.predict(compare_text, top_k=3)
-                    except:
-                        results["BERT"] = {"error": "Model not trained"}
-                    
-                    # RoBERTa
+                        st.success("✓ BERT complete")
+                    except Exception as e:
+                        results["BERT"] = {"error": "Model not available"}
+                        st.warning("⚠ BERT not available")
+                
+                # RoBERTa
+                with st.spinner("Running RoBERTa prediction..."):
                     try:
                         roberta_predictor = load_local_model("RoBERTa")
                         results["RoBERTa"] = roberta_predictor.predict(compare_text, top_k=3)
-                    except:
-                        results["RoBERTa"] = {"error": "Model not trained"}
-                    
-                    # DistilBERT
+                        st.success("✓ RoBERTa complete")
+                    except Exception as e:
+                        results["RoBERTa"] = {"error": "Model not available"}
+                        st.warning("⚠ RoBERTa not available")
+                
+                # DistilBERT
+                with st.spinner("Running DistilBERT prediction..."):
                     try:
                         distilbert_predictor = load_local_model("DistilBERT")
                         results["DistilBERT"] = distilbert_predictor.predict(compare_text, top_k=3)
-                    except:
-                        results["DistilBERT"] = {"error": "Model not trained"}
-                    
-                    # Display comparison
-                    display_comparison(results)
-    
-    # Tab 3: Batch Prediction
-    with tab3:
-        st.subheader("Batch Prediction")
-        
-        uploaded_file = st.file_uploader("Upload CSV file", type=['csv'])
-        
-        if uploaded_file:
-            df = pd.read_csv(uploaded_file)
-            st.write("Preview:", df.head())
-            
-            text_column = st.selectbox("Select text column:", df.columns)
-            
-            if st.button("Run Batch Prediction"):
-                st.info("Batch prediction feature coming soon!")
+                        st.success("✓ DistilBERT complete")
+                    except Exception as e:
+                        results["DistilBERT"] = {"error": "Model not available"}
+                        st.warning("⚠ DistilBERT not available")
+                
+                # Display comparison
+                display_comparison(results)
 
 
 def display_results(result, model_name):
