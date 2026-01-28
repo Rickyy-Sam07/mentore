@@ -194,7 +194,7 @@ def load_local_model(model_type):
 
 def main():
     # Header
-    st.markdown('<div class="main-header">Chapter Classification System</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">Topic Classification System</div>', unsafe_allow_html=True)
     
     # Sidebar
     st.sidebar.title("Settings")
