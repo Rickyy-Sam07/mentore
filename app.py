@@ -14,9 +14,7 @@ import plotly.express as px
 from datetime import datetime
 from huggingface_hub import hf_hub_download
 
-from train import BertChapterClassifier
-from train_roberta import RobertaChapterClassifier
-from train_distilbert import DistilBertChapterClassifier
+from models import BertChapterClassifier, RobertaChapterClassifier, DistilBertChapterClassifier
 from config import MODEL_DIR as BERT_MODEL_DIR, MAX_LENGTH as BERT_MAX_LENGTH
 from config_roberta import MODEL_DIR as ROBERTA_MODEL_DIR, MAX_LENGTH as ROBERTA_MAX_LENGTH
 from config_distilbert import MODEL_DIR as DISTILBERT_MODEL_DIR, MAX_LENGTH as DISTILBERT_MAX_LENGTH
@@ -265,36 +263,25 @@ def main():
             else:
                 results = {}
                 
-                # Run models sequentially to avoid memory issues
-                # BERT
-                with st.spinner("Running BERT prediction..."):
-                    try:
-                        bert_predictor = load_local_model("BERT")
-                        results["BERT"] = bert_predictor.predict(compare_text, top_k=3)
-                        st.success("✓ BERT complete")
-                    except Exception as e:
-                        results["BERT"] = {"error": "Model not available"}
-                        st.warning("⚠ BERT not available")
+                # Run models sequentially with memory cleanup
+                models_to_compare = ["BERT", "RoBERTa", "DistilBERT"]
                 
-                # RoBERTa
-                with st.spinner("Running RoBERTa prediction..."):
-                    try:
-                        roberta_predictor = load_local_model("RoBERTa")
-                        results["RoBERTa"] = roberta_predictor.predict(compare_text, top_k=3)
-                        st.success("✓ RoBERTa complete")
-                    except Exception as e:
-                        results["RoBERTa"] = {"error": "Model not available"}
-                        st.warning("⚠ RoBERTa not available")
-                
-                # DistilBERT
-                with st.spinner("Running DistilBERT prediction..."):
-                    try:
-                        distilbert_predictor = load_local_model("DistilBERT")
-                        results["DistilBERT"] = distilbert_predictor.predict(compare_text, top_k=3)
-                        st.success("✓ DistilBERT complete")
-                    except Exception as e:
-                        results["DistilBERT"] = {"error": "Model not available"}
-                        st.warning("⚠ DistilBERT not available")
+                for model_name in models_to_compare:
+                    with st.spinner(f"Running {model_name} prediction..."):
+                        try:
+                            predictor = load_local_model(model_name)
+                            results[model_name] = predictor.predict(compare_text, top_k=3)
+                            st.success(f"✓ {model_name} complete")
+                            
+                            # Force garbage collection
+                            import gc
+                            gc.collect()
+                            if torch.cuda.is_available():
+                                torch.cuda.empty_cache()
+                                
+                        except Exception as e:
+                            results[model_name] = {"error": f"Model error: {str(e)[:50]}"}
+                            st.warning(f"⚠ {model_name} not available")
                 
                 # Display comparison
                 display_comparison(results)
