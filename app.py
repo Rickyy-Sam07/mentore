@@ -24,7 +24,7 @@ HF_REPO_ID = "Sam-veda/ramayana-chapter-classifier"
 
 # Page config
 st.set_page_config(
-    page_title="Topic Classification System",
+    page_title="Pouranic Topic Classification",
     page_icon="📚",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -192,7 +192,7 @@ def load_local_model(model_type):
 
 def main():
     # Header
-    st.markdown('<div class="main-header">Topic Classification System</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">Pouranic Topic Classification</div>', unsafe_allow_html=True)
     
     # Sidebar
     st.sidebar.title("Settings")
