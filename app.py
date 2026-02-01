@@ -13,6 +13,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime
 from huggingface_hub import hf_hub_download
+import base64
 
 from models import BertChapterClassifier, RobertaChapterClassifier, DistilBertChapterClassifier
 from config import MODEL_DIR as BERT_MODEL_DIR, MAX_LENGTH as BERT_MAX_LENGTH
@@ -30,22 +31,139 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS
-st.markdown("""
+# Load and encode background image
+def get_base64_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+# Get base64 string of background image
+bg_image_path = "br_img.png"
+if os.path.exists(bg_image_path):
+    bg_image_base64 = get_base64_image(bg_image_path)
+    bg_style = f"background-image: url('data:image/png;base64,{bg_image_base64}');"
+else:
+    bg_style = "background-color: #f0f2f6;"
+
+# Custom CSS with background image and glassmorphism
+st.markdown(f"""
 <style>
-    .main-header {
+    .stApp {{
+        {bg_style}
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    
+    /* Glassmorphism effect for all containers */
+    .main-header {{
         font-size: 2.5rem;
         font-weight: bold;
         color: #1f77b4;
         text-align: center;
         margin-bottom: 2rem;
-    }
-    .metric-card {
-        background-color: #f0f2f6;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }}
+    
+    .metric-card {{
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 1rem;
         border-radius: 0.5rem;
         margin: 0.5rem 0;
-    }
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }}
+    
+    /* Input text styling with transparent blur */
+    .stTextInput > div > div, .stTextArea > div > div {{
+        background: transparent !important;
+    }}
+    
+    .stTextInput > div > div > input, 
+    .stTextArea > div > div > textarea,
+    [data-baseweb="textarea"],
+    [data-baseweb="input"] {{
+        background: rgba(255, 255, 255, 0.08) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        border-radius: 0.5rem !important;
+        color: #000000 !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        color-scheme: light !important;
+    }}
+    
+    .stTextInput > div > div > input::placeholder,
+    .stTextArea > div > div > textarea::placeholder {{
+        color: #2a2a2a !important;
+        font-weight: 500 !important;
+    }}
+    
+    /* Force all textarea elements */
+    textarea, textarea[class*="st"] {{
+        background: rgba(255, 255, 255, 0.08) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        color: #000000 !important;
+        color-scheme: light !important;
+    }}
+    
+    /* Selectbox styling */
+    .stSelectbox > div > div {{
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 0.5rem;
+    }}
+    
+    .stSelectbox label, .stTextInput label, .stTextArea label {{
+        color: #1a1a1a !important;
+        font-weight: 600;
+    }}
+    
+    /* Sidebar grey glass effect */
+    [data-testid="stSidebar"] {{
+        background: rgba(128, 128, 128, 0.25) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-right: 1px solid rgba(128, 128, 128, 0.3);
+    }}
+    
+    [data-testid="stSidebar"] * {{
+        color: #1a1a1a !important;
+    }}
+    
+    [data-testid="stSidebar"] .stMarkdown {{
+        color: #1a1a1a !important;
+    }}
+    
+    /* Main content area */
+    .block-container {{
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border-radius: 1rem;
+        padding: 2rem;
+    }}
+    
+    /* Cards and expanders */
+    .stExpander, [data-testid="stExpander"] {{
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 0.5rem;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
