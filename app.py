@@ -63,8 +63,8 @@ st.markdown(f"""
         text-align: center;
         margin-bottom: 2rem;
         background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 1rem;
         border-radius: 0.5rem;
@@ -73,8 +73,8 @@ st.markdown(f"""
     
     .metric-card {{
         background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 1rem;
         border-radius: 0.5rem;
@@ -82,24 +82,37 @@ st.markdown(f"""
         box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     }}
     
-    /* Input text styling with transparent blur */
+    /* Input text styling with no blur and full transparency */
     .stTextInput > div > div, .stTextArea > div > div {{
         background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        pointer-events: auto !important;
     }}
     
     .stTextInput > div > div > input, 
     .stTextArea > div > div > textarea,
     [data-baseweb="textarea"],
     [data-baseweb="input"] {{
-        background: rgba(255, 255, 255, 0.08) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.4) !important;
-        border-radius: 0.5rem !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        border-radius: 0.3rem !important;
         color: #000000 !important;
         font-weight: 600 !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        box-shadow: none !important;
         color-scheme: light !important;
+        padding: 0.3rem 0.4rem !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        font-size: 0.9rem !important;
+        min-height: 2rem !important;
+        pointer-events: auto !important;
+        cursor: text !important;
     }}
     
     .stTextInput > div > div > input::placeholder,
@@ -108,20 +121,46 @@ st.markdown(f"""
         font-weight: 500 !important;
     }}
     
-    /* Force all textarea elements */
+    /* Force all textarea elements with blur */
     textarea, textarea[class*="st"] {{
-        background: rgba(255, 255, 255, 0.08) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         color: #000000 !important;
         color-scheme: light !important;
+        padding: 0.3rem 0.4rem !important;
+        margin: 0 !important;
+        font-size: 0.9rem !important;
+        min-height: 2rem !important;
+        max-height: 10rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        box-shadow: none !important;
+        pointer-events: auto !important;
+        cursor: text !important;
+    }}
+    
+    /* Reduce label spacing */
+    .stTextInput label, .stTextArea label {{
+        margin-bottom: 0.3rem !important;
+        padding: 0 !important;
+    }}
+    
+    /* Compact text input/textarea containers */
+    .stTextInput, .stTextArea {{
+        margin-bottom: 0.5rem !important;
+        padding: 0 !important;
+        max-width: 40% !important;
+    }}
+    
+    .stTextInput > label, .stTextArea > label {{
+        padding-bottom: 0.2rem !important;
     }}
     
     /* Selectbox styling */
     .stSelectbox > div > div {{
         background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 0.5rem;
     }}
@@ -131,11 +170,11 @@ st.markdown(f"""
         font-weight: 600;
     }}
     
-    /* Sidebar grey glass effect */
+    /* Sidebar blur transparent effect */
     [data-testid="stSidebar"] {{
-        background: rgba(128, 128, 128, 0.25) !important;
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        background: rgba(128, 128, 128, 0.15) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         border-right: 1px solid rgba(128, 128, 128, 0.3);
     }}
     
@@ -150,8 +189,8 @@ st.markdown(f"""
     /* Main content area */
     .block-container {{
         background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         border-radius: 1rem;
         padding: 2rem;
     }}
@@ -159,8 +198,8 @@ st.markdown(f"""
     /* Cards and expanders */
     .stExpander, [data-testid="stExpander"] {{
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 0.5rem;
     }}
