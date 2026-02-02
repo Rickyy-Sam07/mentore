@@ -96,21 +96,21 @@ st.markdown(f"""
     .stTextArea > div > div > textarea,
     [data-baseweb="textarea"],
     [data-baseweb="input"] {{
-        background: rgba(255, 255, 255, 0.1) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.6) !important;
-        border-radius: 0.3rem !important;
+        background: white !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1px solid rgba(200, 200, 200, 0.8) !important;
+        border-radius: 0.5rem !important;
         color: #000000 !important;
-        font-weight: 600 !important;
+        font-weight: 500 !important;
         box-shadow: none !important;
         color-scheme: light !important;
-        padding: 0.3rem 0.4rem !important;
+        padding: 0.8rem !important;
         margin: 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        font-size: 0.9rem !important;
-        min-height: 2rem !important;
+        font-size: 1rem !important;
+        min-height: 3rem !important;
         pointer-events: auto !important;
         cursor: text !important;
     }}
@@ -121,19 +121,19 @@ st.markdown(f"""
         font-weight: 500 !important;
     }}
     
-    /* Force all textarea elements with blur */
+    /* Force all textarea elements to be white */
     textarea, textarea[class*="st"] {{
-        background: rgba(255, 255, 255, 0.1) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
+        background: white !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
         color: #000000 !important;
         color-scheme: light !important;
-        padding: 0.3rem 0.4rem !important;
+        padding: 0.8rem !important;
         margin: 0 !important;
-        font-size: 0.9rem !important;
-        min-height: 2rem !important;
-        max-height: 10rem !important;
-        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        font-size: 1rem !important;
+        min-height: 3rem !important;
+        max-height: 20rem !important;
+        border: 1px solid rgba(200, 200, 200, 0.8) !important;
         box-shadow: none !important;
         pointer-events: auto !important;
         cursor: text !important;
@@ -141,19 +141,36 @@ st.markdown(f"""
     
     /* Reduce label spacing */
     .stTextInput label, .stTextArea label {{
-        margin-bottom: 0.3rem !important;
-        padding: 0 !important;
-    }}
-    
-    /* Compact text input/textarea containers */
-    .stTextInput, .stTextArea {{
         margin-bottom: 0.5rem !important;
         padding: 0 !important;
-        max-width: 40% !important;
+        font-weight: 900 !important;
+        font-size: 1.6rem !important;
+        color: #2c5aa0 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+    }}
+    
+    /* Text input/textarea containers with box */
+    .stTextInput, .stTextArea {{
+        margin-top: 3rem !important;
+        margin-bottom: 1rem !important;
+        padding: 1.5rem !important;
+        max-width: 85% !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 0.8rem !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     }}
     
     .stTextInput > label, .stTextArea > label {{
-        padding-bottom: 0.2rem !important;
+        padding-bottom: 0.5rem !important;
+        font-weight: 900 !important;
+        font-size: 1.6rem !important;
+        color: #2c5aa0 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
     }}
     
     /* Selectbox styling */
@@ -165,7 +182,7 @@ st.markdown(f"""
         border-radius: 0.5rem;
     }}
     
-    .stSelectbox label, .stTextInput label, .stTextArea label {{
+    .stSelectbox label {{
         color: #1a1a1a !important;
         font-weight: 600;
     }}
@@ -378,12 +395,10 @@ def main():
     
     # Tab 1: Single Prediction
     with tab1:
-        st.subheader("Enter Text for Classification")
-        
-        # Text input
+        # Text input with label inside container
         text_input = st.text_area(
-            "Input Text:",
-            height=200,
+            "ENTER TEXT FOR CLASSIFICATION",
+            height=150,
             placeholder="Enter text from Ramayana...",
             help="Enter a passage to classify which chapter it belongs to"
         )
