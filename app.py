@@ -139,38 +139,39 @@ st.markdown(f"""
         cursor: text !important;
     }}
     
-    /* Reduce label spacing */
-    .stTextInput label, .stTextArea label {{
-        margin-bottom: 0.5rem !important;
-        padding: 0 !important;
-        font-weight: 900 !important;
-        font-size: 1.6rem !important;
-        color: #2c5aa0 !important;
-        letter-spacing: 0.08em !important;
-        text-transform: uppercase !important;
-    }}
-    
-    /* Text input/textarea containers with box */
+    /* Text input/textarea containers - connect with heading box */
     .stTextInput, .stTextArea {{
-        margin-top: 3rem !important;
+        margin-top: -0.8rem !important;
         margin-bottom: 1rem !important;
-        padding: 1.5rem !important;
+        padding: 0 1.5rem 1.5rem 1.5rem !important;
         max-width: 85% !important;
         background: rgba(255, 255, 255, 0.15) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
         border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        border-radius: 0.8rem !important;
+        border-top: none !important;
+        border-radius: 0 0 0.8rem 0.8rem !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     }}
     
-    .stTextInput > label, .stTextArea > label {{
-        padding-bottom: 0.5rem !important;
+    /* Label styling - MAIN RULE - ULTRA AGGRESSIVE */
+    .stTextInput label, 
+    .stTextArea label,
+    .stTextInput > label, 
+    .stTextArea > label,
+    div[data-testid="stVerticalBlock"] > div > label {{
+        margin-bottom: 0.5rem !important;
+        padding: 0 0 0.5rem 0 !important;
         font-weight: 900 !important;
-        font-size: 1.6rem !important;
-        color: #2c5aa0 !important;
-        letter-spacing: 0.08em !important;
+        font-size: 2.8rem !important;
+        color: #1e4a8a !important;
+        letter-spacing: 0.15em !important;
         text-transform: uppercase !important;
+        -webkit-text-stroke: 1px #1e4a8a !important;
+        text-stroke: 1px #1e4a8a !important;
+        paint-order: stroke fill !important;
+        font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif !important;
+        line-height: 1.2 !important;
     }}
     
     /* Selectbox styling */
@@ -395,12 +396,39 @@ def main():
     
     # Tab 1: Single Prediction
     with tab1:
-        # Text input with label inside container
+        # Container with custom styling for heading (top of box)
+        st.markdown("""
+            <div style='
+                margin-top: 3rem;
+                margin-bottom: 0;
+                padding: 1.5rem 1.5rem 1rem 1.5rem;
+                max-width: 85%;
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-bottom: none;
+                border-radius: 0.8rem 0.8rem 0 0;
+            '>
+                <h2 style='
+                    font-size: 1.8rem; 
+                    font-weight: 900; 
+                    color: #1e4a8a; 
+                    letter-spacing: 0.1em; 
+                    text-transform: uppercase;
+                    font-family: Arial Black, Arial Bold, Gadget, sans-serif;
+                    margin: 0;
+                '>ENTER TEXT FOR CLASSIFICATION</h2>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        # Text input without label (bottom of box)
         text_input = st.text_area(
-            "ENTER TEXT FOR CLASSIFICATION",
+            "",
             height=150,
-            placeholder="Enter text from Ramayana...",
-            help="Enter a passage to classify which chapter it belongs to"
+            placeholder="Enter text....",
+            help="Enter a passage to classify which chapter it belongs to",
+            label_visibility="collapsed"
         )
         
         # Predict button
