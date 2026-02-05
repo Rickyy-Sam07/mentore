@@ -490,14 +490,39 @@ def main():
 def display_results(result, model_name):
     """Display prediction results"""
     
-    st.success("Prediction Complete!")
+    st.markdown("""
+        <div style='
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            color: #000000;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        '>
+            Prediction Complete!
+        </div>
+    """, unsafe_allow_html=True)
     
     # Main prediction
     col1, col2 = st.columns([2, 1])
     
     with col1:
         st.markdown("### Predicted Chapter")
-        st.info(result['predicted_chapter'])
+        st.markdown(f"""
+            <div style='
+                background-color: #d1ecf1;
+                border: 1px solid #bee5eb;
+                border-radius: 0.5rem;
+                padding: 0.75rem 1.25rem;
+                color: #000000;
+                font-size: 1rem;
+                font-weight: 500;
+            '>
+                {result['predicted_chapter']}
+            </div>
+        """, unsafe_allow_html=True)
     
     with col2:
         st.markdown("### Confidence")
